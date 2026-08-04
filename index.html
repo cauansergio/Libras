@@ -3,46 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Glossário Interativo de Libras</title>
+<title>Glossário de Libras - Abaetetuba</title>
 <style>
-  /* ===== RESET E BASE ===== */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --azul-bandeira: #1a3a8f;
+    --azul-escuro: #122a68;
+    --vermelho-bandeira: #d81e2c;
+    --vermelho-escuro: #a3151f;
+    --branco: #ffffff;
+    --cinza-fundo: #f4f6fb;
+    --cinza-texto: #22252b;
   }
 
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f8f9fa; /* fundo claro e neutro */
-    color: #212529;
+    background-color: var(--cinza-fundo);
+    color: var(--cinza-texto);
     line-height: 1.5;
   }
 
   /* ===== CABEÇALHO ===== */
   header {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 24px 16px;
+    background: linear-gradient(90deg, var(--azul-bandeira) 0%, var(--azul-bandeira) 50%, var(--vermelho-bandeira) 50%, var(--vermelho-bandeira) 100%);
+    padding: 32px 16px 20px;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    position: relative;
+  }
+
+  header::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--branco);
+    transform: translateX(-50%);
   }
 
   header h1 {
-    color: #2b6cb0; /* azul suave de destaque */
-    font-size: 1.8rem;
-    margin-bottom: 4px;
+    color: var(--branco);
+    font-size: 1.9rem;
+    margin-bottom: 6px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.35);
+    letter-spacing: 0.5px;
   }
 
   header p {
-    color: #495057;
+    color: #f0f2fa;
     font-size: 0.95rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  }
+
+  header .cidade {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: var(--branco);
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ===== NAVEGAÇÃO POR SEÇÕES (ABAS) ===== */
+  nav.tabs {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    background-color: var(--branco);
+    padding: 14px 16px;
+    border-bottom: 1px solid #e2e6f0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  nav.tabs button {
+    border: 2px solid var(--azul-bandeira);
+    background-color: var(--branco);
+    color: var(--azul-bandeira);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  nav.tabs button:hover {
+    background-color: rgba(26, 58, 143, 0.08);
+  }
+
+  nav.tabs button.active {
+    background-color: var(--azul-bandeira);
+    color: var(--branco);
+  }
+
+  nav.tabs button.active.vermelho {
+    background-color: var(--vermelho-bandeira);
+    border-color: var(--vermelho-bandeira);
   }
 
   /* ===== BARRA DE BUSCA ===== */
   .search-container {
     max-width: 500px;
-    margin: 20px auto;
+    margin: 24px auto 8px;
     padding: 0 16px;
   }
 
@@ -50,17 +123,41 @@
     width: 100%;
     padding: 12px 16px;
     font-size: 1rem;
-    border: 2px solid #cbd5e0;
+    border: 2px solid var(--azul-bandeira);
     border-radius: 8px;
     outline: none;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: var(--branco);
   }
 
   #searchInput:focus {
-    border-color: #2b6cb0;
+    border-color: var(--vermelho-bandeira);
+    box-shadow: 0 0 0 3px rgba(216, 30, 44, 0.15);
   }
 
-  /* ===== GRID DE CARDS (RESPONSIVA) ===== */
+  .section-title {
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title h2 {
+    color: var(--azul-escuro);
+    font-size: 1.3rem;
+  }
+
+  .section-title .contagem {
+    background-color: var(--vermelho-bandeira);
+    color: var(--branco);
+    font-size: 0.75rem;
+    padding: 2px 10px;
+    border-radius: 999px;
+  }
+
+  /* ===== GRID DE CARDS ===== */
   .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -70,36 +167,72 @@
     padding: 16px 24px 60px;
   }
 
-  /* ===== CARD DE SINAL ===== */
+  /* ===== CARD (IMAGEM + TÍTULO, CLICÁVEL) ===== */
   .card {
-    background-color: #ffffff;
+    background-color: var(--branco);
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     text-align: center;
-    border: 1px solid #edf2f7;
+    border: 1px solid #e2e6f0;
+    border-top: 4px solid var(--azul-bandeira);
   }
 
-  .card:hover,
-  .card:focus {
+  .card:nth-child(even) {
+    border-top: 4px solid var(--vermelho-bandeira);
+  }
+
+  .card:hover, .card:focus {
     transform: translateY(-6px);
-    box-shadow: 0 10px 20px rgba(43, 108, 176, 0.18);
+    box-shadow: 0 10px 22px rgba(26, 58, 143, 0.22);
+  }
+
+  .card .thumb-wrap {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    background-color: #e9ecef;
   }
 
   .card img {
     width: 100%;
-    height: 180px;
+    height: 100%;
     object-fit: cover;
-    background-color: #e9ecef; /* placeholder caso a imagem não carregue */
     display: block;
   }
 
+  .card .play-badge {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 34px;
+    height: 34px;
+    background: radial-gradient(circle at 30% 30%, #f58529, #dd2a7b 40%, #8134af 70%, #515bd4 100%);
+    color: var(--branco);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+
   .card h3 {
-    padding: 14px 10px;
+    padding: 14px 10px 6px;
     font-size: 1.1rem;
-    color: #1a202c;
+    color: var(--azul-escuro);
+  }
+
+  .card .tag {
+    display: inline-block;
+    margin: 0 0 12px;
+    font-size: 0.7rem;
+    color: var(--vermelho-escuro);
+    background-color: rgba(216, 30, 44, 0.08);
+    padding: 2px 10px;
+    border-radius: 999px;
   }
 
   .no-results {
@@ -110,12 +243,12 @@
     font-size: 1.05rem;
   }
 
-  /* ===== MODAL / POP-UP ===== */
+  /* ===== MODAL / POP-UP (EMBED DO INSTAGRAM) ===== */
   .modal-overlay {
-    display: none; /* controlado via JS */
+    display: none;
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(10, 15, 30, 0.75);
     align-items: center;
     justify-content: center;
     z-index: 1000;
@@ -127,55 +260,80 @@
   }
 
   .modal-box {
-    background-color: #ffffff;
+    background-color: var(--branco);
     border-radius: 14px;
-    max-width: 640px;
+    max-width: 420px;
     width: 100%;
-    max-height: 90vh;
+    max-height: 92vh;
     overflow-y: auto;
     position: relative;
-    padding: 24px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    padding: 24px 16px 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    border-top: 6px solid var(--vermelho-bandeira);
   }
 
   .modal-close {
     position: absolute;
     top: 14px;
     right: 14px;
-    background-color: #f1f3f5;
+    background-color: var(--azul-bandeira);
     border: none;
     width: 36px;
     height: 36px;
     border-radius: 50%;
     font-size: 1.2rem;
-    color: #495057;
+    color: var(--branco);
     cursor: pointer;
     line-height: 1;
     transition: background-color 0.2s ease;
+    z-index: 2;
   }
 
   .modal-close:hover {
-    background-color: #e2e8f0;
+    background-color: var(--vermelho-bandeira);
   }
 
   .modal-box h2 {
-    color: #2b6cb0;
-    margin-bottom: 16px;
+    color: var(--azul-escuro);
+    margin-bottom: 14px;
     padding-right: 40px;
+    text-align: center;
   }
 
-  .modal-box video {
+  .instagram-embed-wrap {
     width: 100%;
-    border-radius: 10px;
-    background-color: #000;
-    max-height: 60vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .instagram-embed-wrap iframe {
+    width: 100%;
+    min-width: 300px;
+    border: none;
+    border-radius: 8px;
+  }
+
+  .modal-fallback {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #718096;
+    margin-top: 10px;
+  }
+
+  .modal-fallback a {
+    color: var(--azul-bandeira);
+    font-weight: 600;
+    text-decoration: none;
   }
 
   /* ===== RODAPÉ ===== */
   footer {
     text-align: center;
     padding: 20px;
-    color: #a0aec0;
+    background: linear-gradient(90deg, var(--azul-escuro) 0%, var(--azul-escuro) 50%, var(--vermelho-escuro) 50%, var(--vermelho-escuro) 100%);
+    color: #eef0f8;
     font-size: 0.85rem;
   }
 </style>
@@ -183,182 +341,208 @@
 <body>
 
 <header>
-  <h1>Glossário de Libras</h1>
-  <p>Clique em um sinal para assistir ao vídeo demonstrativo</p>
+  <h1>Glossário de Libras de Abaetetuba</h1>
+  <p>Veja a imagem do sinal e clique para assistir ao vídeo no Instagram</p>
+  <span class="cidade">Abaetetuba &middot; Pará</span>
 </header>
 
+<nav class="tabs" id="tabsNav"></nav>
+
 <div class="search-container">
-  <input type="text" id="searchInput" placeholder="Buscar sinal (ex: Obrigado, Bom dia...)" aria-label="Buscar sinal">
+  <input type="text" id="searchInput" placeholder="Buscar por nome..." aria-label="Buscar">
 </div>
 
-<!-- Os cards serão inseridos aqui dinamicamente pelo JavaScript -->
+<div class="section-title">
+  <h2 id="sectionTitle">Bairros</h2>
+  <span class="contagem" id="sectionCount">0</span>
+</div>
+
 <main class="grid-container" id="gridContainer"></main>
 
-<!-- ===== MODAL (Pop-up) ===== -->
+<!-- ===== MODAL (vídeo incorporado do Instagram) ===== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
     <button class="modal-close" id="modalCloseBtn" aria-label="Fechar">&times;</button>
     <h2 id="modalTitle">Título do sinal</h2>
-    <video id="modalVideo" controls>
-      Seu navegador não suporta a tag de vídeo.
-    </video>
+    <div class="instagram-embed-wrap" id="instagramEmbedWrap"></div>
+    <p class="modal-fallback">Não carregou? <a id="modalLinkFallback" href="#" target="_blank" rel="noopener">Abrir no Instagram</a></p>
   </div>
 </div>
 
 <footer>
-  <p>Glossário de Libras &mdash; desemvolvido por Cauan Sergio</p>
+  <p>Glossário de Libras de Abaetetuba &mdash; desenvolvido por Cauan Sergio</p>
 </footer>
 
 <script>
   /* =========================================================
-     1. DADOS DOS SINAIS
-     Cada objeto representa um sinal do glossário.
-     - id: identificador único
-     - titulo: nome do sinal em português (usado na busca)
-     - imagem: caminho relativo para a imagem do card
-     - video: caminho relativo para o vídeo do sinal
-  ========================================================= */
-  const sinais = [
-    {
-      id: 1,
-      titulo: "Obrigado",
-      imagem: "imagens/obrigado.png",
-      video: "videos/obrigado.mp4"
-    },
-    {
-      id: 2,
-      titulo: "Por favor",
-      imagem: "imagens/por-favor.png",
-      video: "videos/por-favor.mp4"
-    },
-    {
-      id: 3,
-      titulo: "Bom dia",
-      imagem: "imagens/bom-dia.png",
-      video: "videos/bom-dia.mp4"
-    },
-    {
-      id: 4,
-      titulo: "Aprender",
-      imagem: "imagens/aprender.png",
-      video: "videos/aprender.mp4"
-    }
-    // Para adicionar mais sinais, basta incluir novos objetos aqui,
-    // seguindo o mesmo formato (id, titulo, imagem, video).
-  ];
+     DADOS
+     Cada seção tem: rótulo (label) e uma lista de itens.
+     Cada item tem:
+       - nome:      nome exibido (ex: "Centro")
+       - imagem:    caminho da imagem que mostra como se escreve/soletra a palavra
+       - instagram: link do post/reel PÚBLICO do Instagram com o vídeo do sinal
+                    (ex: "https://www.instagram.com/reel/XXXXXXXXXXX/")
+       - tag:       (opcional) etiqueta extra, ex: "Municipal"
 
-  /* =========================================================
-     2. REFERÊNCIAS DOS ELEMENTOS DO DOM
+     IMPORTANTE: o post do Instagram precisa ser de um perfil PÚBLICO,
+     senão o vídeo não aparece incorporado.
   ========================================================= */
+  const secoes = {
+    bairros: {
+      label: "Bairros",
+      itens: [
+        { nome: "Cristo", imagem: "imagens/bairros/cristo.png", instagram: "https://www.instagram.com/reel/DbmANbOt0F4/" },
+        { nome: "Algodoal", imagem: "imagens/bairros/algodoal.png", instagram: "https://www.instagram.com/reel/Dbl-_-LNVVB/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+        { nome: "Mutirão", imagem: "imagens/bairros/mutirao.png", instagram: "https://www.instagram.com/reel/DbmAFwQtF27/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+        { nome: "Jarumã", imagem: "imagens/bairros/jaruma.png", instagram: "https://www.instagram.com/reel/Dbl_8P-NON_/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+        { nome: "Bosque", imagem: "imagens/bairros/bosque.png", instagram: "https://www.instagram.com/reel/Dbl_vwaho5J/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" },
+        { nome: "Santa Rosa", imagem: "imagens/bairros/santa-rosa.png", instagram: "https://www.instagram.com/reel/Dbl_dsHN9zs/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" }
+      ]
+    },
+    escolas: {
+      label: "Escolas",
+      itens: [
+        { nome: "E.M.E.F. Nazaré Paes", imagem: "imagens/escolas/nazare-paes.png", instagram: "https://www.instagram.com/reel/EXEMPLO_NAZAREPAES/", tag: "Municipal" },
+        { nome: "Colégio Estadual de Abaetetuba", imagem: "imagens/escolas/colegio-estadual.png", instagram: "https://www.instagram.com/reel/EXEMPLO_COLEGIOESTADUAL/", tag: "Estadual" },
+        { nome: "Escola Dom Vicente Zico", imagem: "imagens/escolas/dom-vicente-zico.png", instagram: "https://www.instagram.com/reel/EXEMPLO_DOMVICENTEZICO/", tag: "Estadual" }
+      ]
+    },
+    ruas: {
+      label: "Ruas",
+      itens: [
+        { nome: "Avenida 15 de Agosto", imagem: "imagens/ruas/av-15-de-agosto.png", instagram: "https://www.instagram.com/reel/EXEMPLO_AV15/" },
+        { nome: "Rua Siqueira Mendes", imagem: "imagens/ruas/siqueira-mendes.png", instagram: "https://www.instagram.com/reel/EXEMPLO_SIQUEIRAMENDES/" },
+        { nome: "Travessa Simão Jatene", imagem: "imagens/ruas/simao-jatene.png", instagram: "https://www.instagram.com/reel/EXEMPLO_SIMAOJATENE/" }
+      ]
+    },
+    pontos: {
+      label: "Pontos de Referência",
+      itens: [
+        { nome: "Porto de Abaetetuba", imagem: "imagens/pontos/porto.png", instagram: "https://www.instagram.com/reel/EXEMPLO_PORTO/" },
+        { nome: "Praça Matriz", imagem: "imagens/pontos/praca-matriz.png", instagram: "https://www.instagram.com/reel/EXEMPLO_PRACAMATRIZ/" },
+        { nome: "Mercado Municipal", imagem: "imagens/pontos/mercado-municipal.png", instagram: "https://www.instagram.com/reel/EXEMPLO_MERCADO/" }
+      ]
+    }
+    // para criar uma nova seção, copie o formato acima com uma nova chave
+  };
+
+  let secaoAtual = "bairros";
+
+  const tabsNav = document.getElementById("tabsNav");
   const gridContainer = document.getElementById("gridContainer");
   const searchInput = document.getElementById("searchInput");
+  const sectionTitle = document.getElementById("sectionTitle");
+  const sectionCount = document.getElementById("sectionCount");
   const modalOverlay = document.getElementById("modalOverlay");
   const modalTitle = document.getElementById("modalTitle");
-  const modalVideo = document.getElementById("modalVideo");
   const modalCloseBtn = document.getElementById("modalCloseBtn");
+  const instagramEmbedWrap = document.getElementById("instagramEmbedWrap");
+  const modalLinkFallback = document.getElementById("modalLinkFallback");
 
-  /* =========================================================
-     3. RENDERIZAÇÃO DINÂMICA DOS CARDS
-     Recebe uma lista de sinais e desenha os cards na tela.
-  ========================================================= */
-  function renderizarCards(lista) {
-    // Limpa o conteúdo atual da grade
+  /* ===== ABAS DE SEÇÃO ===== */
+  function renderizarAbas() {
+    tabsNav.innerHTML = "";
+    Object.keys(secoes).forEach(function (chave, indice) {
+      const botao = document.createElement("button");
+      botao.textContent = secoes[chave].label;
+      botao.className = chave === secaoAtual ? "active" + (indice % 2 === 1 ? " vermelho" : "") : "";
+      botao.addEventListener("click", function () {
+        secaoAtual = chave;
+        searchInput.value = "";
+        renderizarAbas();
+        renderizarCards();
+      });
+      tabsNav.appendChild(botao);
+    });
+  }
+
+  /* ===== CARDS (IMAGEM + NOME) ===== */
+  function renderizarCards() {
+    const termo = searchInput.value.trim().toLowerCase();
+    const secao = secoes[secaoAtual];
+    const itensFiltrados = secao.itens.filter(function (item) {
+      return item.nome.toLowerCase().includes(termo);
+    });
+
+    sectionTitle.textContent = secao.label;
+    sectionCount.textContent = itensFiltrados.length;
+
     gridContainer.innerHTML = "";
 
-    // Caso a busca não encontre nenhum resultado
-    if (lista.length === 0) {
-      gridContainer.innerHTML = `<p class="no-results">Nenhum sinal encontrado.</p>`;
+    if (itensFiltrados.length === 0) {
+      gridContainer.innerHTML = `<p class="no-results">Nenhum item encontrado.</p>`;
       return;
     }
 
-    lista.forEach(function (sinal) {
-      // Cria o elemento do card
+    itensFiltrados.forEach(function (item) {
       const card = document.createElement("div");
       card.className = "card";
-      card.setAttribute("tabindex", "0"); // acessibilidade via teclado
+      card.setAttribute("tabindex", "0");
       card.setAttribute("role", "button");
-      card.setAttribute("aria-label", "Ver vídeo do sinal " + sinal.titulo);
+      card.setAttribute("aria-label", "Ver vídeo do sinal " + item.nome + " no Instagram");
 
       card.innerHTML = `
-        <img src="${sinal.imagem}" alt="Ilustração do sinal ${sinal.titulo}">
-        <h3>${sinal.titulo}</h3>
+        <div class="thumb-wrap">
+          <img src="${item.imagem}" alt="Como se escreve ${item.nome}">
+          <span class="play-badge">&#9654;</span>
+        </div>
+        <h3>${item.nome}</h3>
+        ${item.tag ? `<span class="tag">${item.tag}</span>` : ""}
       `;
 
-      // Ao clicar no card, abre o modal com o vídeo correspondente
-      card.addEventListener("click", function () {
-        abrirModal(sinal);
-      });
-
-      // Permite abrir o modal também pelo teclado (Enter ou Espaço)
+      card.addEventListener("click", function () { abrirModal(item); });
       card.addEventListener("keypress", function (evento) {
-        if (evento.key === "Enter" || evento.key === " ") {
-          abrirModal(sinal);
-        }
+        if (evento.key === "Enter" || evento.key === " ") { abrirModal(item); }
       });
 
       gridContainer.appendChild(card);
     });
   }
 
-  /* =========================================================
-     4. ABERTURA DO MODAL
-     Define o título e a fonte do vídeo, depois exibe o modal.
-  ========================================================= */
-  function abrirModal(sinal) {
-    modalTitle.textContent = sinal.titulo;
-    modalVideo.src = sinal.video;
-    modalOverlay.classList.add("active");
-    modalVideo.load(); // garante que o vídeo carregue a nova fonte
+  /* ===== ABERTURA / FECHAMENTO DO MODAL (EMBED INSTAGRAM) ===== */
+  function montarUrlEmbed(link) {
+    // Remove parâmetros extras (ex: ?utm_source=...&igsh=...) e monta a URL de embed
+    let url = link.trim().split("?")[0];
+    if (!url.endsWith("/")) url += "/";
+    return url + "embed";
   }
 
-  /* =========================================================
-     5. FECHAMENTO DO MODAL
-     Importante: pausa o vídeo e reseta o tempo para o início,
-     evitando que o áudio/vídeo continue tocando em segundo plano.
-  ========================================================= */
+  function abrirModal(item) {
+    modalTitle.textContent = item.nome;
+    modalLinkFallback.href = item.instagram;
+
+    instagramEmbedWrap.innerHTML = `
+      <iframe
+        src="${montarUrlEmbed(item.instagram)}"
+        height="600"
+        frameborder="0"
+        scrolling="no"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>
+    `;
+
+    modalOverlay.classList.add("active");
+  }
+
   function fecharModal() {
     modalOverlay.classList.remove("active");
-    modalVideo.pause();
-    modalVideo.currentTime = 0;
-    modalVideo.src = ""; // libera o recurso de vídeo
+    instagramEmbedWrap.innerHTML = ""; // remove o iframe para parar o vídeo
   }
 
-  // Fecha ao clicar no botão "X"
   modalCloseBtn.addEventListener("click", fecharModal);
-
-  // Fecha ao clicar fora da caixa do modal (no fundo escuro)
   modalOverlay.addEventListener("click", function (evento) {
-    if (evento.target === modalOverlay) {
-      fecharModal();
-    }
+    if (evento.target === modalOverlay) { fecharModal(); }
   });
-
-  // Fecha também ao pressionar a tecla "Esc"
   document.addEventListener("keydown", function (evento) {
-    if (evento.key === "Escape" && modalOverlay.classList.contains("active")) {
-      fecharModal();
-    }
+    if (evento.key === "Escape" && modalOverlay.classList.contains("active")) { fecharModal(); }
   });
 
-  /* =========================================================
-     6. BARRA DE BUSCA
-     Filtra os sinais em tempo real conforme o usuário digita.
-  ========================================================= */
-  searchInput.addEventListener("input", function () {
-    const termo = searchInput.value.trim().toLowerCase();
+  searchInput.addEventListener("input", renderizarCards);
 
-    const filtrados = sinais.filter(function (sinal) {
-      return sinal.titulo.toLowerCase().includes(termo);
-    });
-
-    renderizarCards(filtrados);
-  });
-
-  /* =========================================================
-     7. INICIALIZAÇÃO
-     Renderiza todos os sinais assim que a página carrega.
-  ========================================================= */
-  renderizarCards(sinais);
+  /* ===== INICIALIZAÇÃO ===== */
+  renderizarAbas();
+  renderizarCards();
 </script>
 
 </body>
